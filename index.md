@@ -1,2 +1,1 @@
-# Hi! I'm claudi.
-## Under construction!
+# Hi! I'm Claudi.
