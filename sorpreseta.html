@@ -1,6 +1,98 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <script async src="//jsfiddle.net/claudix/zLh3d51x/7/embed/result/"></script>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Pacifico&display=swap");
+
+#btn {
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  background: #fff;
+  cursor: pointer;
+  margin: 14px;
+}
+
+#svg {
+  width: calc(100% - 28px);
+  height: 260px;
+  margin: 0 14px 14px;
+  border: 1px solid #eee;
+  border-radius: 14px;
+  background: #fff;
+}
+
+#word {
+  font-family: "Pacifico", cursive;
+  font-size: 170px;
+
+  fill: hotpink;      /* solid fill */
+  stroke: hotpink;    /* match stroke to fill */
+  stroke-width: 2;    /* thinner outline since it's filled */
+  stroke-linecap: round;
+  stroke-linejoin: round;
+
+  stroke-dasharray: var(--len);
+  stroke-dashoffset: var(--len);
+}
+
+
+.run #word {
+  animation: draw 2.4s ease forwards;
+}
+
+.run #clipRect {
+  animation: reveal 2.4s linear forwards;
+}
+
+@keyframes draw {
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes reveal {
+  from { width: 0; }
+  to { width: 900px; }
+}
+    </style>
+    <script>
+      const btn = document.getElementById("btn");
+const svg = document.getElementById("svg");
+const word = document.getElementById("word");
+const clipRect = document.getElementById("clipRect");
+
+function restart() {
+  // Reset clip
+  clipRect.setAttribute("width", "0");
+
+  // Compute a usable stroke length (SVG text doesn't reliably support getTotalLength everywhere)
+  // This approximation works well enough for the dash animation.
+  const bbox = word.getBBox();
+  const approxLen = bbox.width * 3.2; // heuristic for cursive outline length
+
+  word.style.setProperty("--len", String(approxLen));
+
+  // Restart animations
+  svg.classList.remove("run");
+  void svg.getBoundingClientRect(); // reflow
+  svg.classList.add("run");
+}
+
+btn.addEventListener("click", restart);
+
+    </script>
   </head>
+  <body>
+    <button id="btn">Fes-me clic!</button>
+
+<svg id="svg" viewBox="0 0 900 260" role="img" aria-label="T’estimo">
+  <defs>
+    <clipPath id="clip">
+      <rect id="clipRect" x="0" y="0" width="0" height="260"></rect>
+    </clipPath>
+  </defs>
+
+  <text id="word" x="40" y="185" clip-path="url(#clip)">T’estimo</text>
+</svg>
+
+  </body>
 </html>
